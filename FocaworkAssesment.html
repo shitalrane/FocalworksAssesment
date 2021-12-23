@@ -1,0 +1,83 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <script>
+
+        function getCommonWords(correctAnswers, response) {
+            let common = [];
+            for (let i = 0; i < correctAnswers.length; ++i) {
+                for (let j = 0; j < response.length; ++j) {
+
+                    // Ignoring case sensitivity.
+                    if (correctAnswers[i].toLowerCase() == response[j].toLowerCase()) {
+                        // If element is in both the arrays
+                        // Push to common array
+                        common.push(correctAnswers[i]);
+                    }
+                }
+            }
+            return [...new Set(common)];
+        }
+
+        function getScore(wordsArr) {
+            let totalScore = 0;
+
+            for (let index = 0; index < wordsArr.length; index++) {
+                const element = wordsArr[index];
+
+                if (element.length <= 0) {
+                    continue;
+                }
+                if (!isNaN(element)) {
+                    // Numbers - 4 points
+                    totalScore += 4
+                } else if (element.length > 7) {
+                    // Words with more than 7 characters - 3 points
+                    totalScore += 3
+                } else if (element.length >= 5) {
+                    totalScore += 1
+                }
+            }
+            return totalScore;
+        }
+
+        function compareResponseWithAnswer(correctAnswer, response) {
+            // Ignore ',' as we are calculating points for only words
+            let str1 = correctAnswer.replaceAll(',', ' ');
+            // Ignore '.' as we are calculating points for only words
+            let str2 = str1.replaceAll('.', ' ');
+            let strArr = str2.split(" ");
+            maximumPossibleScore = getScore(strArr);
+            document.write(`Maximum Possible Score is : ${maximumPossibleScore}  <br>`)
+
+            // Ignore ',' as we are calculating points for only words
+            let str3 = response.replaceAll(',', ' ');
+            // Ignore '.' as we are calculating points for only words
+            let str4 = str3.replaceAll('.', ' ');
+            let strArr2 = str4.split(" ");
+
+            let commonWords = getCommonWords(strArr, strArr2)
+            let pointScored = getScore(commonWords);
+            document.write(`Points Scored: ${pointScored}  <br>`)
+            let percent = (pointScored / maximumPossibleScore) * 100;
+            document.write(`The percentage score is ${percent}%  <br>`)
+        }
+
+        let correctString = "There are twenty-four hours in a day, 30 days in a month, and 12 months in the calendar year.";
+        let respString = "There are Twenty-Four hours in a day. A year has 14 months.";
+
+        document.write(`Correct String: ${correctString} <br>`)
+        document.write(`Response: ${respString} <br>`)
+        compareResponseWithAnswer(correctString, respString)
+
+        // Errors with the test data provided
+        // 1. In above correct string 'calender' has length 8 i.e more than 7 so its score will be 3 points.
+
+    </script>
+</body>
+
+</html>
